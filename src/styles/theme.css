@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+@theme {
+  /* Palette — pulled from Gather Garage's own materials */
+  --color-truck-red: #C41E2A;
+  --color-truck-red-dim: #8F1620;
+  --color-garage-black: #17181B;
+  --color-garage-black-soft: #202226;
+  --color-worn-white: #EDEAE3;
+  --color-worn-white-dim: #DEDACF;
+  --color-beam-orange: #C8611E;
+  --color-lift-blue: #2E5C8A;
+  --color-lift-blue-dim: #1F3F5F;
+  --color-bay-grey: #8B8D8F;
+  --color-bay-grey-dim: #58595B;
+
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-utility: "IBM Plex Mono", "Courier New", monospace;
+
+  --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-reveal: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-aisle: aisle 2.4s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aisle {
+  0%, 100% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: -24;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 64px;
+  }
+
+  body {
+    background-color: var(--color-garage-black);
+    color: var(--color-worn-white);
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background-color: var(--color-truck-red);
+    color: var(--color-worn-white);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-beam-orange);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile browsers (Safari/Chrome) include the address bar in `vh`,
+     making 92vh taller than what's actually visible until the bar
+     collapses. `dvh` tracks the real visible viewport; the plain `vh`
+     line above it is a fallback for browsers that don't support dvh. */
+  .hero-viewport {
+    min-height: 92vh;
+    min-height: 92dvh;
+  }
+}
