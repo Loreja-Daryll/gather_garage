@@ -7,8 +7,8 @@ const PHONE = "(574) 532-0658";
 const PHONE_HREF = "tel:+15745320658";
 
 // Radius (px) of the x-ray "light" that follows the cursor
-const REVEAL_RADIUS = 150;
-const MOBILE_REVEAL_RADIUS = 90;
+const REVEAL_RADIUS = 120;
+const MOBILE_REVEAL_RADIUS = 60;
 
 export function Hero() {
   const heroRef = useRef<HTMLElement | null>(null);
