@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import heroCar from "../assets/hero-car.jpg";
 import heroCarXray from "../assets/hero-car-xray.jpg";
@@ -8,6 +8,7 @@ const PHONE_HREF = "tel:+15745320658";
 
 // Radius (px) of the x-ray "light" that follows the cursor
 const REVEAL_RADIUS = 150;
+const MOBILE_REVEAL_RADIUS = 90;
 
 export function Hero() {
   const heroRef = useRef<HTMLElement | null>(null);
@@ -16,6 +17,18 @@ export function Hero() {
   const headlineSkeletonRef = useRef<HTMLHeadingElement | null>(null);
   const lightRef = useRef<HTMLDivElement | null>(null);
   const [isActive, setIsActive] = useState(false);
+  const [revealRadius, setRevealRadius] = useState(REVEAL_RADIUS);
+
+  useEffect(() => {
+    const updateRevealRadius = () => {
+      setRevealRadius(window.innerWidth < 640 ? MOBILE_REVEAL_RADIUS : REVEAL_RADIUS);
+    };
+
+    updateRevealRadius();
+    window.addEventListener("resize", updateRevealRadius);
+
+    return () => window.removeEventListener("resize", updateRevealRadius);
+  }, []);
 
   // Written directly to the DOM (not React state) so it stays smooth on
   // fast mouse movement. Each masked element gets coordinates relative to
@@ -51,8 +64,8 @@ export function Hero() {
   const handlePointerUp = () => setIsActive(false);
 
   const maskStyle = () => ({
-    WebkitMaskImage: `radial-gradient(circle ${REVEAL_RADIUS}px at var(--mx, 50%) var(--my, 50%), black 55%, transparent 100%)`,
-    maskImage: `radial-gradient(circle ${REVEAL_RADIUS}px at var(--mx, 50%) var(--my, 50%), black 55%, transparent 100%)`,
+    WebkitMaskImage: `radial-gradient(circle ${revealRadius}px at var(--mx, 50%) var(--my, 50%), black 55%, transparent 100%)`,
+    maskImage: `radial-gradient(circle ${revealRadius}px at var(--mx, 50%) var(--my, 50%), black 55%, transparent 100%)`,
   });
 
   return (
@@ -90,8 +103,8 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 z-30 rounded-full transition-opacity duration-200 ease-out"
         style={{
-          width: REVEAL_RADIUS * 2,
-          height: REVEAL_RADIUS * 2,
+          width: revealRadius * 2,
+          height: revealRadius * 2,
           opacity: isActive ? 1 : 0,
           border: "1px solid rgba(237,234,227,0.45)",
           boxShadow:
