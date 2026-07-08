@@ -86,14 +86,20 @@ export function Hero() {
           src={heroCar}
           alt="Classic sedan raised on a blue two-post lift inside the Gather Garage shop"
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ WebkitTouchCallout: "none", WebkitUserSelect: "none", userSelect: "none" }}
         />
         <img
           ref={xrayRef}
           src={heroCarXray}
-          alt=""
           aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ease-out"
-          style={{ opacity: isActive ? 1 : 0, ...maskStyle() }}
+          style={{
+            opacity: isActive ? 1 : 0,
+            WebkitTouchCallout: "none",
+            WebkitUserSelect: "none",
+            userSelect: "none",
+            ...maskStyle(),
+          }}
         />
       </div>
 
